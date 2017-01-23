@@ -3,10 +3,10 @@ package com.miksh.weather.weather_list;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +36,8 @@ public class WeatherListFragment extends Fragment
     private List<WeatherCardModel> weatherResponse = new ArrayList<>();
 
     private WeatherListAdapter weatherAdapter;
+
+    private static final String ERROR_DIALOG_TAG = "ErrorDialog";
 
     @BindView(R.id.weather_recycler_view)
     RecyclerView weatherRecyclerView;
@@ -100,6 +102,8 @@ public class WeatherListFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_list:
+                weatherResponse.clear();
+                weatherAdapter.notifyDataSetChanged();
                 weatherListPresenter.loadWeather(true);
                 break;
             case R.id.choose_location:
@@ -142,7 +146,12 @@ public class WeatherListFragment extends Fragment
 
     @Override
     public void showError(String errTitle, String errMsg) {
-        Log.d("", "");
+        setEmptyResponseMessage(true);
+        setLoadIndicator(false);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        ErrorDialogFragment errorDialogFragment = ErrorDialogFragment.newInstance();
+        errorDialogFragment.show(fragmentManager, ERROR_DIALOG_TAG);
     }
 
     @Override

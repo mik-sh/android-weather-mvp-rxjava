@@ -17,4 +17,10 @@
 
     <string name="no_data">There is no data at the moment.\n Please try again later.</string>
 
+    <string name="error_title">Error has occurred</string>
+
+    <string name="error_message">Please check your internet connection.\nAnd try again later.</string>
+
+    <string name="ok_btn">OK</string>
+
 </resources>

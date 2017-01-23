@@ -61,6 +61,7 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     public void loadWeather(boolean forceReload) {
 
         weatherListView.setLoadIndicator(true);
+        weatherListView.setEmptyResponseMessage(false);
 
         subscriptions.clear();
         Subscription subscription = retrofitSingleton
