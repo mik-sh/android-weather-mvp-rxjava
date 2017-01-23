@@ -34,6 +34,8 @@ public interface WeatherListContract {
 
         void loadWeather(boolean forceReload);
 
+        boolean isLoading();
+
     }
 
 }

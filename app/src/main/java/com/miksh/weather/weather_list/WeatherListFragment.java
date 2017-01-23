@@ -102,9 +102,11 @@ public class WeatherListFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_list:
-                weatherResponse.clear();
-                weatherAdapter.notifyDataSetChanged();
-                weatherListPresenter.loadWeather(true);
+                if (!weatherListPresenter.isLoading()) {
+                    weatherResponse.clear();
+                    weatherAdapter.notifyDataSetChanged();
+                    weatherListPresenter.loadWeather(true);
+                }
                 break;
             case R.id.choose_location:
 

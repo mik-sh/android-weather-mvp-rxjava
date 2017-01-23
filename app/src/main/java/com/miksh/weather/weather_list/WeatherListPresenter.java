@@ -37,6 +37,8 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     @NonNull
     private CompositeSubscription subscriptions;
 
+    private boolean isLoading = false;
+
     WeatherListPresenter(
             @NonNull RetrofitSingleton retrofitSingleton,
             @NonNull WeatherListContract.View weatherListView) {
@@ -60,6 +62,8 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     @Override
     public void loadWeather(boolean forceReload) {
 
+        setLoading(true);
+
         weatherListView.setLoadIndicator(true);
         weatherListView.setEmptyResponseMessage(false);
 
@@ -69,6 +73,8 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(response -> {
+                    setLoading(false);
+
                     if (response.getResultCode().equals("200")) {
                         processWeather(response);
                     } else {
@@ -76,10 +82,23 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
                         weatherListView.showError("Error", errorMsg);
                     }
                 })
-                .doOnError(err -> weatherListView.showError("Error", err.getLocalizedMessage()))
+                .doOnError(err -> {
+                    setLoading(false);
+
+                    weatherListView.showError("Error", err.getLocalizedMessage());
+                })
                 .subscribe();
 
         subscriptions.add(subscription);
+    }
+
+    @Override
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    private void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
     }
 
     private void processWeather(@NonNull WeatherResponse weatherResponse) {
