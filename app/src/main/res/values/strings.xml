@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Weather</string>
+
+    <string name="refresh">Refresh</string>
+
+    <string name="location">Location</string>
+
+    <string name="morning">Morning</string>
+
+    <string name="day">Day</string>
+
+    <string name="evening">Evening</string>
+
+    <string name="night">Night</string>
+
+    <string name="celsius">%1$s °C</string>
+
+</resources>
