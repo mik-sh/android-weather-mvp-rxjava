@@ -33,6 +33,5 @@ public class WeatherListActivity extends AppCompatActivity {
                 RetrofitSingleton.getInstance(),
                 weatherListFragment);
 
-        // TODO: Load previously saved state, if available.
     }
 }

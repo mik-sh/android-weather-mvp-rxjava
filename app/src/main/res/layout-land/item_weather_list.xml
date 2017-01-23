@@ -13,33 +13,47 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <TextView
-            android:text="Sunday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/day_of_week"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-        <TextView
-            android:text="Jan 22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/day_of_week"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:id="@+id/date"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/date"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:id="@+id/line1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:text="Sunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/day_of_week"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                <TextView
+                    android:text="Jan 22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:id="@+id/date"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <TextView
+                    android:text="light snow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line1"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:id="@+id/weather_description"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="0dp"
@@ -61,21 +75,12 @@
 
         </LinearLayout>
 
-        <TextView
-            android:text="light snow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/line1"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:id="@+id/weather_description"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/weather_description"
+            android:layout_below="@+id/line1"
             android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/activity_vertical_margin">
 

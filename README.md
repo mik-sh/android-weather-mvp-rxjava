@@ -7,6 +7,5 @@ Simple Weather application based on MVP pattern.
 * Change region 
   * by name
   * by map
-* Landscape orientation cards
 * Pull to refresh
 * etc
