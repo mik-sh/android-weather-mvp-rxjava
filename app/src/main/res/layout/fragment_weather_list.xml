@@ -4,6 +4,21 @@
     android:layout_height="match_parent"
     tools:context="com.miksh.weather.weather_list.WeatherListFragment">
 
+    <TextView
+        android:text="@string/no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/empty_list_message"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:textAlignment="center"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weather_progress_bar"
+        android:layout_gravity="center"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/weather_recycler_view"
         android:scrollbars="vertical"

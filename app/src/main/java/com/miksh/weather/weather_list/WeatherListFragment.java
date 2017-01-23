@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.miksh.weather.R;
 import com.miksh.weather.models.WeatherCardModel;
@@ -37,6 +39,12 @@ public class WeatherListFragment extends Fragment
 
     @BindView(R.id.weather_recycler_view)
     RecyclerView weatherRecyclerView;
+
+    @BindView(R.id.weather_progress_bar)
+    ProgressBar weatherProgressBar;
+
+    @BindView(R.id.empty_list_message)
+    TextView emptyListMessage;
 
     public WeatherListFragment() {
 
@@ -111,6 +119,7 @@ public class WeatherListFragment extends Fragment
 
     @Override
     public void updateWeatherList(List<WeatherCardModel> weatherResponse) {
+        weatherProgressBar.setVisibility(View.GONE);
         this.weatherResponse.clear();
         this.weatherResponse.addAll(weatherResponse);
         weatherAdapter.notifyDataSetChanged();
@@ -124,7 +133,11 @@ public class WeatherListFragment extends Fragment
 
     @Override
     public void setLoadIndicator(boolean show) {
-        Log.d("", "");
+        if (show) {
+            weatherProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            weatherProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -133,7 +146,11 @@ public class WeatherListFragment extends Fragment
     }
 
     @Override
-    public void showEmptyResponse() {
-        Log.d("", "");
+    public void setEmptyResponseMessage(boolean show) {
+        if (show) {
+            emptyListMessage.setVisibility(View.VISIBLE);
+        } else {
+            emptyListMessage.setVisibility(View.GONE);
+        }
     }
 }

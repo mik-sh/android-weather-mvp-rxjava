@@ -15,4 +15,6 @@
 
     <string name="celsius">%1$s °C</string>
 
+    <string name="no_data">There is no data at the moment.\n Please try again later.</string>
+
 </resources>

@@ -22,7 +22,7 @@ public interface WeatherListContract {
 
         void showError(String errTitle, String errMsg);
 
-        void showEmptyResponse();
+        void setEmptyResponseMessage(boolean show);
 
     }
 

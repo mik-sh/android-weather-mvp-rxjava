@@ -84,10 +84,11 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     private void processWeather(@NonNull WeatherResponse weatherResponse) {
         weatherListView.setLoadIndicator(false);
         if (weatherResponse.isEmpty()) {
-            weatherListView.showEmptyResponse();
+            weatherListView.setEmptyResponseMessage(true);
         } else {
             List<WeatherCardModel> weatherCardsList = convertWeatherResponse(weatherResponse.getWeatherList());
 
+            weatherListView.setEmptyResponseMessage(false);
             weatherListView.updateCityTitle(weatherResponse.getCity().getCityName());
             weatherListView.updateWeatherList(weatherCardsList);
         }
