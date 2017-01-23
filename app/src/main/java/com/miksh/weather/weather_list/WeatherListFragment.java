@@ -3,6 +3,7 @@ package com.miksh.weather.weather_list;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -117,7 +118,8 @@ public class WeatherListFragment extends Fragment
 
     @Override
     public void updateCityTitle(String cityName) {
-        Log.d("", "");
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle("In ".concat(cityName));
     }
 
     @Override
