@@ -4,8 +4,6 @@ Simple Weather application based on MVP pattern.
 
 ### To-DO:
 * Animations
-* Change region 
-  * by name
-  * by map
+* Change region by name
 * Pull to refresh
 * etc
