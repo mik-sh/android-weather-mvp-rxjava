@@ -84,9 +84,10 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
 
         String celsius = context.getString(R.string.celsius);
 
-        String imageName = "icon_".concat(weatherItem.getWeatherImage().replace(".png", ""));
+        String imageName = "icon_".concat((weatherItem.getWeatherImage().replace(".png", "")).replace("n", "d"));
         final int imageId = context.getResources()
                 .getIdentifier(imageName, "drawable", context.getPackageName());
+
         Drawable weatherImage = ContextCompat.getDrawable(context, imageId);
 
         holder.dayOfWeek.setText(weatherItem.getDayOfWeek());
