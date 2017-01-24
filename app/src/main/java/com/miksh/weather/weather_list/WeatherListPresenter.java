@@ -10,14 +10,13 @@ import com.miksh.weather.models.WeatherCardModel;
 import com.miksh.weather.models.WeatherItem;
 import com.miksh.weather.models.WeatherParam;
 import com.miksh.weather.models.WeatherResponse;
+import com.miksh.weather.utils.SharedPreferencesHelper;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -62,34 +61,67 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     @Override
     public void loadWeather(boolean forceReload) {
 
+        long lastQueryId = SharedPreferencesHelper.getInstance()
+                .getLong(SharedPreferencesHelper.Key.LAST_CITY_ID_LONG);
+
+
+        if (lastQueryId == 0) {
+            lastQueryId = 519690;   // Saint-Petersburg id
+        }
+
+        startLoading();
+
+        subscriptions.clear();
+        Subscription subscription = retrofitSingleton
+                .getWeather(forceReload, String.valueOf(lastQueryId))
+                .doOnNext(this::weatherSuccessResponse)
+                .doOnError(this::weatherErrorResponse)
+                .subscribe();
+
+        subscriptions.add(subscription);
+    }
+
+    @Override
+    public void loadWeather(boolean forceReload, String lat, String lon) {
+
+        startLoading();
+
+        subscriptions.clear();
+        Subscription subscription = retrofitSingleton
+                .getWeather(forceReload, lat, lon)
+                .doOnNext(this::weatherSuccessResponse)
+                .doOnError(this::weatherErrorResponse)
+                .subscribe();
+
+        subscriptions.add(subscription);
+
+    }
+
+    private void startLoading() {
+
         setLoading(true);
 
         weatherListView.setLoadIndicator(true);
         weatherListView.setEmptyResponseMessage(false);
+    }
 
-        subscriptions.clear();
-        Subscription subscription = retrofitSingleton
-                .getWeather(forceReload)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(response -> {
-                    setLoading(false);
+    private void weatherSuccessResponse(WeatherResponse response) {
 
-                    if (response.getResultCode().equals("200")) {
-                        processWeather(response);
-                    } else {
-                        String errorMsg = response.getErrorMessage().or("Error has occurred");
-                        weatherListView.showError("Error", errorMsg);
-                    }
-                })
-                .doOnError(err -> {
-                    setLoading(false);
+        setLoading(false);
 
-                    weatherListView.showError("Error", err.getLocalizedMessage());
-                })
-                .subscribe();
+        if (response.getResultCode().equals("200")) {
+            processWeather(response);
+        } else {
+            String errorMsg = response.getErrorMessage().or("Error has occurred");
+            weatherListView.showError("Error", errorMsg);
+        }
+    }
 
-        subscriptions.add(subscription);
+    private void weatherErrorResponse(Throwable err) {
+
+        setLoading(false);
+
+        weatherListView.showError("Error", err.getLocalizedMessage());
     }
 
     @Override
@@ -97,11 +129,19 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
         return isLoading;
     }
 
+    @Override
+    public void openMap() {
+        weatherListView.showMapUI();
+    }
+
     private void setLoading(boolean isLoading) {
         this.isLoading = isLoading;
     }
 
     private void processWeather(@NonNull WeatherResponse weatherResponse) {
+        SharedPreferencesHelper.getInstance()
+                .put(SharedPreferencesHelper.Key.LAST_CITY_ID_LONG, weatherResponse.getCity().getCityId());
+
         weatherListView.setLoadIndicator(false);
         if (weatherResponse.isEmpty()) {
             weatherListView.setEmptyResponseMessage(true);

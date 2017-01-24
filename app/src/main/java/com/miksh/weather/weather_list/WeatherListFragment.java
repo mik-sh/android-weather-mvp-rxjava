@@ -1,9 +1,12 @@
 package com.miksh.weather.weather_list;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.miksh.weather.R;
+import com.miksh.weather.map.MapActivity;
 import com.miksh.weather.models.WeatherCardModel;
 
 import java.util.ArrayList;
@@ -38,6 +43,8 @@ public class WeatherListFragment extends Fragment
     private WeatherListAdapter weatherAdapter;
 
     private static final String ERROR_DIALOG_TAG = "ErrorDialog";
+
+    private final int COORDINATES_REQUEST = 2;
 
     @BindView(R.id.weather_recycler_view)
     RecyclerView weatherRecyclerView;
@@ -109,7 +116,7 @@ public class WeatherListFragment extends Fragment
                 }
                 break;
             case R.id.choose_location:
-
+                    weatherListPresenter.openMap();
                 break;
         }
         return true;
@@ -128,13 +135,17 @@ public class WeatherListFragment extends Fragment
         weatherProgressBar.setVisibility(View.GONE);
         this.weatherResponse.clear();
         this.weatherResponse.addAll(weatherResponse);
+        weatherRecyclerView.smoothScrollToPosition(0);
         weatherAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void updateCityTitle(String cityName) {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setSubtitle("In ".concat(cityName));
+        ActionBar actionBar = activity.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setSubtitle("In ".concat(cityName));
+        }
     }
 
     @Override
@@ -163,5 +174,26 @@ public class WeatherListFragment extends Fragment
         } else {
             emptyListMessage.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void showMapUI() {
+        Intent intent = new Intent(getContext(), MapActivity.class);
+        startActivityForResult(intent, COORDINATES_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == COORDINATES_REQUEST) {
+
+            if (resultCode == Activity.RESULT_OK) {
+                LatLng latLng = data.getParcelableExtra("CoordinatesResult");
+                String lat = String.valueOf(latLng.latitude);
+                String lon = String.valueOf(latLng.longitude);
+                weatherListPresenter.loadWeather(true, lat, lon);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

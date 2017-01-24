@@ -14,11 +14,22 @@ import rx.Observable;
 public interface ApiInterface {
 
     @GET("data/2.5/forecast/daily?")
-    Observable<WeatherResponse> getPoint(
+    Observable<WeatherResponse> getWeatherById(
             @Query("id") String cityId,
             @Query("cnt") int daysCount,
             @Query("appid") String apiKey,
-            @Query("units") String units
+            @Query("units") String units,
+            @Query("mode") String mode
+    );
+
+    @GET("data/2.5/forecast/daily?")
+    Observable<WeatherResponse> getWeatherByLocation(
+            @Query("lat") String lat,
+            @Query("lon") String lon,
+            @Query("cnt") int daysCount,
+            @Query("appid") String apiKey,
+            @Query("units") String units,
+            @Query("mode") String mode
     );
 
 }

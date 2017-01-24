@@ -24,6 +24,8 @@ public interface WeatherListContract {
 
         void setEmptyResponseMessage(boolean show);
 
+        void showMapUI();
+
     }
 
     interface Presenter {
@@ -34,7 +36,11 @@ public interface WeatherListContract {
 
         void loadWeather(boolean forceReload);
 
+        void loadWeather(boolean forceReload, String lat, String lon);
+
         boolean isLoading();
+
+        void openMap();
 
     }
 

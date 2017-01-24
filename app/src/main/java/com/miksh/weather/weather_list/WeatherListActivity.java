@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.miksh.weather.R;
 import com.miksh.weather.api.RetrofitSingleton;
 import com.miksh.weather.utils.NavigationUtils;
+import com.miksh.weather.utils.SharedPreferencesHelper;
 
 public class WeatherListActivity extends AppCompatActivity {
 
@@ -15,6 +16,8 @@ public class WeatherListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_list);
+
+        SharedPreferencesHelper.getInstance(getApplicationContext());
 
         WeatherListFragment weatherListFragment =
                 (WeatherListFragment) getSupportFragmentManager().findFragmentById(R.id.weather_list_container);
