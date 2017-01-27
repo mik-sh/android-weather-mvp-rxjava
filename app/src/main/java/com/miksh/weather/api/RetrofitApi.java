@@ -14,9 +14,7 @@ import rx.subjects.BehaviorSubject;
  * Created by mik.sh on 21/01/2017.
  */
 
-public class RetrofitSingleton {
-
-    private static volatile RetrofitSingleton INSTANCE;
+public class RetrofitApi {
 
     private ApiInterface apiService;
 
@@ -24,21 +22,8 @@ public class RetrofitSingleton {
 
     private final String API_KEY = "30fcf35fee62d38e02fbfd7f33aa1acd";
 
-    public static RetrofitSingleton getInstance() {
 
-        RetrofitSingleton localInstance = INSTANCE;
-        if (localInstance == null) {
-            synchronized (RetrofitSingleton.class) {
-                localInstance = INSTANCE;
-                if (localInstance == null) {
-                    INSTANCE = localInstance = new RetrofitSingleton();
-                }
-            }
-        }
-        return localInstance;
-    }
-
-    private RetrofitSingleton() {
+    public RetrofitApi() {
         init();
     }
 

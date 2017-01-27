@@ -5,7 +5,7 @@ import android.location.Geocoder;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.miksh.weather.api.RetrofitSingleton;
+import com.miksh.weather.api.RetrofitApi;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,16 +20,16 @@ public class MapPresenter
         implements MapContract.Presenter {
 
     @NonNull
-    private RetrofitSingleton retrofitSingleton;
+    private RetrofitApi retrofitApi;
 
     @NonNull
     private MapContract.View mapView;
 
     MapPresenter(
-            @NonNull RetrofitSingleton retrofitSingleton,
+            @NonNull RetrofitApi retrofitApi,
             @NonNull MapContract.View mapView) {
 
-        this.retrofitSingleton = checkNotNull(retrofitSingleton, "Retrofit singleton cannot be null");
+        this.retrofitApi = checkNotNull(retrofitApi, "Retrofit singleton cannot be null");
         this.mapView = checkNotNull(mapView, "View cannot be null");
 
         mapView.setPresenter(this);

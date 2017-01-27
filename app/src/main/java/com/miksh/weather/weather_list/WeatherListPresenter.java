@@ -4,17 +4,20 @@ import android.support.annotation.NonNull;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-import com.miksh.weather.api.RetrofitSingleton;
+import com.miksh.weather.WeatherApp;
+import com.miksh.weather.api.RetrofitApi;
 import com.miksh.weather.models.TemperatureParam;
 import com.miksh.weather.models.WeatherCardModel;
 import com.miksh.weather.models.WeatherItem;
 import com.miksh.weather.models.WeatherParam;
 import com.miksh.weather.models.WeatherResponse;
-import com.miksh.weather.utils.SharedPreferencesHelper;
+import com.miksh.weather.utils.AppPreferences.SharedPreferencesHelper;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -28,7 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class WeatherListPresenter implements WeatherListContract.Presenter {
 
     @NonNull
-    private RetrofitSingleton retrofitSingleton;
+    private RetrofitApi retrofitApi;
 
     @NonNull
     private WeatherListContract.View weatherListView;
@@ -36,13 +39,18 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     @NonNull
     private CompositeSubscription subscriptions;
 
+    @Inject
+    SharedPreferencesHelper sharedPreferencesHelper;
+
     private boolean isLoading = false;
 
     WeatherListPresenter(
-            @NonNull RetrofitSingleton retrofitSingleton,
+            @NonNull RetrofitApi retrofitApi,
             @NonNull WeatherListContract.View weatherListView) {
 
-        this.retrofitSingleton = checkNotNull(retrofitSingleton, "Retrofit singleton cannot be null");
+        WeatherApp.getSharedPreferencesComponent().inject(this);
+
+        this.retrofitApi = checkNotNull(retrofitApi, "Retrofit singleton cannot be null");
         this.weatherListView = checkNotNull(weatherListView, "View cannot be null");
 
         subscriptions = new CompositeSubscription();
@@ -61,7 +69,7 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     @Override
     public void loadWeather(boolean forceReload) {
 
-        long lastQueryId = SharedPreferencesHelper.getInstance()
+        long lastQueryId = sharedPreferencesHelper
                 .getLong(SharedPreferencesHelper.Key.LAST_CITY_ID_LONG);
 
 
@@ -72,7 +80,7 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
         startLoading();
 
         subscriptions.clear();
-        Subscription subscription = retrofitSingleton
+        Subscription subscription = retrofitApi
                 .getWeather(forceReload, String.valueOf(lastQueryId))
                 .doOnNext(this::weatherSuccessResponse)
                 .doOnError(this::weatherErrorResponse)
@@ -87,7 +95,7 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
         startLoading();
 
         subscriptions.clear();
-        Subscription subscription = retrofitSingleton
+        Subscription subscription = retrofitApi
                 .getWeather(forceReload, lat, lon)
                 .doOnNext(this::weatherSuccessResponse)
                 .doOnError(this::weatherErrorResponse)
@@ -139,7 +147,7 @@ public class WeatherListPresenter implements WeatherListContract.Presenter {
     }
 
     private void processWeather(@NonNull WeatherResponse weatherResponse) {
-        SharedPreferencesHelper.getInstance()
+        sharedPreferencesHelper
                 .put(SharedPreferencesHelper.Key.LAST_CITY_ID_LONG, weatherResponse.getCity().getCityId());
 
         weatherListView.setLoadIndicator(false);

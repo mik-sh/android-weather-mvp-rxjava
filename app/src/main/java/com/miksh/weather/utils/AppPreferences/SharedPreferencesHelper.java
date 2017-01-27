@@ -1,4 +1,4 @@
-package com.miksh.weather.utils;
+package com.miksh.weather.utils.AppPreferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
  * Created by mik.sh on 24/01/2017.
  */
 public class SharedPreferencesHelper {
-
-    private static volatile SharedPreferencesHelper INSTANCE;
 
     private SharedPreferences sharedPreferences;
 
@@ -20,37 +18,7 @@ public class SharedPreferencesHelper {
 
     }
 
-    public static SharedPreferencesHelper getInstance(Context context) {
-
-        SharedPreferencesHelper localInstance = INSTANCE;
-        if (localInstance == null) {
-            synchronized (SharedPreferencesHelper.class) {
-                localInstance = INSTANCE;
-                if (localInstance == null) {
-                    INSTANCE = localInstance = new SharedPreferencesHelper(context.getApplicationContext());
-                }
-            }
-        }
-
-        return localInstance;
-    }
-
-    public static SharedPreferencesHelper getInstance() {
-
-        SharedPreferencesHelper localInstance = INSTANCE;
-        if (localInstance == null) {
-            synchronized (SharedPreferencesHelper.class) {
-                localInstance = INSTANCE;
-                if (localInstance == null) {
-                    throw new IllegalArgumentException("SharedPreferenceHelper should be initialized with getInstance(Context) at least once");
-                }
-            }
-        }
-
-        return localInstance;
-    }
-
-    private SharedPreferencesHelper(Context appContext) {
+    public SharedPreferencesHelper(Context appContext) {
         init(appContext);
     }
 
